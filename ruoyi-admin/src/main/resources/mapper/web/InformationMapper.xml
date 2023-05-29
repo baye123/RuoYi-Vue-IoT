@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.InformationMapper">
+    <resultMap id="DeviceResult" type="com.ruoyi.web.domain.Device">
+        <id property="id" column="id"/>
+        <result property="device_id" column="device_id"/>
+        <result property="device_name" column="device_name"/>
+        <result property="device_type" column="device_type"/>
+        <result property="device_brand" column="device_brand"/>
+        <result property="device_status" column="device_status"/>
+        <result property="manufacture_date" column="manufacture_date"/>
+        <result property="burchasing_date" column="burchasing_date"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+    <sql id="selectDevice">
+        select id,device_id,device_name,device_type,device_brand,device_status,manufacture_date,burchasing_date,create_by,create_time
+        from device
+    </sql>
+
+    <select id="selectDeviceList" parameterType="Device" resultMap="DeviceResult">
+        select id,device_id,device_name,device_type,device_brand,device_status,manufacture_date,burchasing_date,create_by,create_time from device
+        where 1=1
+        <if test='device_id!= null'>
+            and device_id = #{device_id}
+        </if>
+        <if test='device_name!= null'>
+            and device_name = #{device_name}
+        </if>
+        <if test='device_status!=null'>
+            and device_status = #{device_status}
+        </if>
+    </select>
+
+    <select id="checkInformationIdUnique" parameterType="String" resultMap="DeviceResult">
+        <include refid="selectDevice"/>
+        where device_id=#{device_id} limit 1
+    </select>
+
+    <select id="selectDeviceByDevice_id" parameterType="String" resultMap="DeviceResult">
+        <include refid="selectDevice"/>
+        where device_id=#{device_id}
+    </select>
+    <insert id="insertDevice" parameterType="Device" useGeneratedKeys="true" keyProperty="id">
+        insert into device(
+        <if test="id != null and id != 0">id,</if>
+        <if test="device_id != null and device_id != ''">device_id,</if>
+        <if test="device_name != null and device_name != ''">device_name,</if>
+        <if test="device_type != null">device_type,</if>
+        <if test="device_brand != null and device_brand != ''">device_brand,</if>
+        <if test="device_status != null and device_status != ''">device_status,</if>
+        <if test="manufacture_date != null and manufacture_date != ''">manufacture_date,</if>
+        <if test="burchasing_date != null and burchasing_date != ''">burchasing_date,</if>
+        <if test="create_by != null and create_by != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="device_id != null and device_id != ''">#{device_id},</if>
+        <if test="device_name != null and device_name != ''">#{device_name},</if>
+        <if test="device_type != null">#{device_type},</if>
+        <if test="device_brand != null and device_brand != ''">#{device_brand},</if>
+        <if test="device_status != null and device_status != ''">#{device_status},</if>
+        <if test="manufacture_date != null and manufacture_date != ''">#{manufacture_date},</if>
+        <if test="burchasing_date != null and burchasing_date != ''">#{burchasing_date},</if>
+        <if test="create_by != null and create_by != ''">#{create_by},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateDevice" parameterType="Device">
+        update device
+        <set>
+            <if test="device_id != null and device_id != ''">device_id = #{device_id},</if>
+            <if test="device_name != null and device_name != ''">device_name = #{device_name},</if>
+            <if test="device_type != null">device_type = #{device_type},</if>
+            <if test="device_brand != null and device_brand != ''">device_brand = #{device_brand},</if>
+            <if test="device_status != null and device_status != ''">device_status = #{device_status},</if>
+            <if test="manufacture_date != null and manufacture_date != ''">manufacture_date = #{manufacture_date},</if>
+            <if test="burchasing_date != null and burchasing_date != ''">burchasing_date = #{burchasing_date},</if>
+            <if test="update_by != null and update_by != ''">update_by = #{update_by},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="DeviceByDevice_ids" parameterType="String">
+        delete from device where device_id in
+        <foreach collection="array" item="device_id" open="(" separator="," close=")">
+            #{device_id}
+        </foreach>
+    </delete>
+
+</mapper>

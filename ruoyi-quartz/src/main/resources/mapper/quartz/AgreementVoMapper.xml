@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.quartz.mapper.AgreementVoMapper">
+    <resultMap id="AgreementVoResult" type="com.ruoyi.quartz.domain.AgreementVo">
+        <id property="id" column="id"/>
+        <result property="agreement_id" column="agreement_id"/>
+        <result property="agreement_type" column="agreement_type"/>
+        <result property="ip" column="ip"/>
+        <result property="port" column="port"/>
+        <result property="agreement_status" column="agreement_status"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <select id="getAgreementVoList" parameterType="AgreementVo" resultMap="AgreementVoResult">
+        select id,agreement_id,agreement_type,ip,port,agreement_status,create_by,create_time from agreement
+
+    </select>
+
+
+
+
+
+</mapper>

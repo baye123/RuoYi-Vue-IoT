@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.EquipmentConfigMapper">
+    <resultMap id="EquipmentConfigResult" type="com.ruoyi.web.domain.EquipmentConfig">
+        <id property="id" column="id"/>
+        <result property="equipment_id" column="equipment_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="exchang_name" column="exchang_name"/>
+        <result property="routing_key" column="routing_key"/>
+        <result property="queue_name" column="queue_name"/>
+
+    </resultMap>
+
+    <select id="selectEquipmentList" parameterType="EquipmentConfig" resultMap="EquipmentConfigResult">
+        select equipment_id,exchang_name,routing_key,queue_name,create_time from equipment_config
+        where 1=1
+        <if test='equipment_id!= null'>
+            and equipment_id = #{equipmentId}
+        </if>
+        <if test='exchang_name!= null'>
+            and exchang_name = #{exchang_name}
+        </if>
+        <if test='routing_key!= null'>
+            and routing_key = #{routing_key}
+        </if>
+    </select>
+</mapper>

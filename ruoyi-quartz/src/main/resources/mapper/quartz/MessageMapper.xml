@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.quartz.mapper.MessageMapper">
+    <resultMap id="AgreementVoResult" type="com.ruoyi.quartz.domain.Message">
+        <id property="id" column="id"/>
+        <result property="IP" column="IP"/>
+        <result property="equipmentId" column="equipment_id"/>
+        <result property="status_value" column="status_value"/>
+        <result property="light" column="light"/>
+        <result property="time" column="time"/>
+        <result property="DI_1" column="DI_1"/>
+        <result property="DI_2" column="DI_2"/>
+        <result property="DI_3" column="DI_3"/>
+        <result property="DI_4" column="DI_4"/>
+        <result property="DI_5" column="DI_5"/>
+        <result property="DI_6" column="DI_6"/>
+        <result property="DI_7" column="DI_7"/>
+        <result property="DI_8" column="DI_8"/>
+        <result property="original_information" column="original_information"/>
+        <result property="cycle" column="cycle"/>
+    </resultMap>
+
+    <!--新增保存数据-->
+    <insert id="insertMessage" parameterType="com.ruoyi.quartz.domain.Message">
+        insert into ${table} (equipment_id,light,status_value, time, DI_1, DI_2, DI_3, DI_4, DI_5, DI_6, DI_7, DI_8, cycle,original_information)
+        values (#{equipmentId},#{light},#{status_value},#{time},#{DI_1},#{DI_2},#{DI_3},#{DI_4},#{DI_5},#{DI_6},#{DI_7},#{DI_8},#{cycle},#{original_information})
+    </insert>
+
+    <select id="existTable" parameterType="String" resultType="Integer">
+        select count(1)
+        from information_schema.`TABLES`
+        where LCASE(TABLE_NAME)=#{tableName} and TABLE_SCHEMA = "ry-vue"
+    </select>
+
+    <update id="createNewTable" parameterType="String">
+        create table ${tableName}
+        (
+            id                   int(11) primary key not null auto_increment,
+            equipment_id         varchar(50),
+            light                varchar(50),
+            time                 varchar(50),
+            status_value         varchar(50),
+            DI_1                 varchar(10),
+            DI_2                 varchar(10),
+            DI_3                 varchar(10),
+            DI_4                 varchar(10),
+            DI_5                 varchar(10),
+            DI_6                 varchar(10),
+            DI_7                 varchar(10),
+            DI_8                 varchar(10),
+            cycle                varchar(50),
+            original_information varchar(50),
+        )
+    </update>
+
+
+
+
+
+
+</mapper>

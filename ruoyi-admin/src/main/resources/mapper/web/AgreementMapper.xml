@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.AgreementMapper">
+    <resultMap id="AgreementResult" type="com.ruoyi.web.domain.Agreement">
+        <id property="id" column="id"/>
+        <result property="agreement_id" column="agreement_id"/>
+        <result property="agreement_type" column="agreement_type"/>
+        <result property="ip" column="ip"/>
+        <result property="port" column="port"/>
+        <result property="agreement_status" column="agreement_status"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+    <sql id="selectAgreement">
+        select id,agreement_id,agreement_type,agreement_status,ip,port,create_by,create_time
+        from agreement
+    </sql>
+
+    <select id="selectAgreementList" parameterType="Agreement" resultMap="AgreementResult">
+        select id,agreement_id,agreement_type,ip,port,agreement_status,create_by,create_time from agreement
+        where 1=1
+        <if test='agreement_id!= null'>
+            and agreement_id = #{agreement_id}
+        </if>
+        <if test='agreement_type!= null'>
+            and agreement_type = #{agreement_type}
+        </if>
+        <if test='agreement_status!=null'>
+            and agreement_status = #{agreement_status}
+        </if>
+    </select>
+
+    <select id="checkAgreementIdUnique" parameterType="String" resultMap="AgreementResult">
+        <include refid="selectAgreement"/>
+        where agreement_id=#{agreement_id} limit 1
+    </select>
+
+    <select id="selectAgreementByAgreement_id" parameterType="String" resultMap="AgreementResult">
+        <include refid="selectAgreement"/>
+        where agreement_id=#{agreement_id}
+    </select>
+    <insert id="insertAgreement" parameterType="Agreement" useGeneratedKeys="true" keyProperty="id">
+        insert into agreement(
+        <if test="id != null and id != 0">id,</if>
+        <if test="agreement_id != null and agreement_id != ''">agreement_id,</if>
+        <if test="agreement_type != null">agreement_type,</if>
+        <if test="agreement_status != null and agreement_status != ''">agreement_status,</if>
+        <if test="ip != null and ip != ''">ip,</if>
+        <if test="port != null and port != ''">port,</if>
+        <if test="create_by != null and create_by != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="agreement_id != null and agreement_id != ''">#{agreement_id},</if>
+        <if test="agreement_type != null">#{agreement_type},</if>
+        <if test="agreement_status != null and agreement_status != ''">#{agreement_status},</if>
+        <if test="ip != null and ip != ''">#{ip},</if>
+        <if test="port != null and port != ''">#{port},</if>
+        <if test="create_by != null and create_by != ''">#{create_by},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateAgreement" parameterType="Agreement">
+        update agreement
+        <set>
+            <if test="id != null and id != 0">id = #{id},</if>
+            <if test="agreement_id != null and agreement_id != ''">agreement_id = #{agreement_id},</if>
+            <if test="agreement_type != null">agreement_type = #{agreement_type},</if>
+            <if test="agreement_status != null and agreement_status != ''">agreement_status = #{agreement_status},</if>
+            <if test="ip != null and ip != ''">ip = #{ip},</if>
+            <if test="port != null and port != ''">port = #{port},</if>
+            <if test="create_by != null and create_by != ''">create_by = #{create_by},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="AgreementByAgreement_ids" parameterType="String">
+        delete from agreement where agreement_id in
+        <foreach collection="array" item="agreement_id" open="(" separator="," close=")">
+            #{agreement_id}
+        </foreach>
+    </delete>
+
+
+</mapper>

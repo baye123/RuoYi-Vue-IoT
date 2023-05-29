@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.DeviceToAgreementMapper">
+    <resultMap id="Device_to_agreementVoResult" type="com.ruoyi.web.domain.vo.Device_to_agreementVo">
+        <id property="id" column="id"/>
+        <result property="agreement_id" column="agreement_id"/>
+        <result property="agreement_type" column="agreement_type"/>
+        <result property="device_id" column="device_id"/>
+        <result property="device_name" column="device_name"/>
+    </resultMap>
+    <sql id="selectDevice_to_agreementVo">
+        SELECT *
+        from
+            (
+                select a.agreement_id,a.agreement_type,d.device_id,d.device_name
+                from agreement as a,
+                     device as d,
+                     device_to_agreement as t
+                WHERE a.agreement_id = t.agreement_id and d.device_id = t.device_id
+            ) as temp
+    </sql>
+
+    <select id="selectDevice_to_agreementVoList" parameterType="Device_to_agreementVo" resultMap="Device_to_agreementVoResult">
+        SELECT *
+        from
+        (
+        select a.agreement_id,a.agreement_type,d.device_id,d.device_name
+        from agreement as a,
+        device as d,
+        device_to_agreement as t
+        WHERE a.agreement_id = t.agreement_id and d.device_id = t.device_id
+        ) as temp
+        where 1=1
+        <if test='agreement_id!= null'>
+            and temp.agreement_id = #{agreement_id}
+        </if>
+        <if test='agreement_type!= null'>
+            and temp.agreement_type = #{agreement_type}
+        </if>
+        <if test='device_id!=null'>
+            and temp.device_id = #{device_id}
+        </if>
+        <if test='device_name!=null'>
+            and temp.device_name = #{device_name}
+        </if>
+    </select>
+
+    <select id="checkAgreementIdUnique" parameterType="String" resultMap="Device_to_agreementVoResult">
+        <include refid="selectDevice_to_agreementVo"/>
+        where temp.agreement_id=#{agreement_id} limit 1
+    </select>
+
+    <select id="selectDevice_to_agreementVoByAgreement_id" parameterType="String" resultMap="Device_to_agreementVoResult">
+        <include refid="selectDevice_to_agreementVo"/>
+        where temp.agreement_id=#{agreement_id}
+    </select>
+    <insert id="insertDevice_to_agreementVo" parameterType="Device_to_agreementVo" useGeneratedKeys="true" keyProperty="id">
+        insert into Device_to_agreement(
+        <if test="id != null and id != 0">id</if>
+        <if test="agreement_id != null and agreement_id != ''">agreement_id,</if>
+        <if test="device_id !=null">device_id</if>
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="agreement_id != null and agreement_id != ''">#{agreement_id},</if>
+        <if test="device_id !=null">#{device_id}</if>
+        )
+    </insert>
+
+    <update id="updateDevice_to_agreementVo" parameterType="Device_to_agreementVo">
+        update Device_to_agreement
+        <set>
+            <if test="id != null and id != 0">id = #{id},</if>
+            <if test="agreement_id != null and agreement_id != ''">agreement_id = #{agreement_id},</if>
+            <if test="device_id != null and device_id != ''">device_id = #{device_id}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="Device_to_agreementVoByAgreement_ids" parameterType="String">
+        delete from Device_to_agreement where agreement_id in
+        <foreach collection="array" item="agreement_id" open="(" separator="," close=")">
+            #{agreement_id}
+        </foreach>
+    </delete>
+
+
+</mapper>
