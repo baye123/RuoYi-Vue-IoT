@@ -21,9 +21,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int insertMessage(Message message){
         if (messageMapper.existTable(message.getTable()) == 0) {
-            messageMapper.createNewTable(message.getTable());
+            return messageMapper.createNewTable(message.getTable());
+
         }
-        return messageMapper.insertMessage(message);
+            return messageMapper.insertMessage(message);
 
 
     }

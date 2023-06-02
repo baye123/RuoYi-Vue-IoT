@@ -24,6 +24,25 @@ public class Analysis {
 
         return data;
     }
+    public Long cutmsg2(String msg){
+        String[] the_split = msg.split("\n");
+        this.news = the_split[1];
+
+        return Long.parseLong(the_split[0]);
+    }
+
+    public int getDistanceTime(long time1, long time2) {
+        long sec = 0;
+        long diff;
+        if (time1 < time2) {
+            diff = time2 - time1;
+        } else {
+            diff = time1 - time2;
+        }
+        sec = (diff /1000);
+        if (sec != 0) return (int)sec;
+        return 0;
+    }
 
 
 

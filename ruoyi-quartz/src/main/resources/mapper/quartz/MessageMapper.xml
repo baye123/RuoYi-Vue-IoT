@@ -20,13 +20,17 @@
         <result property="DI_7" column="DI_7"/>
         <result property="DI_8" column="DI_8"/>
         <result property="original_information" column="original_information"/>
-        <result property="cycle" column="cycle"/>
+        <result property="time_stamp" column="time_stamp"/>
+        <result property="cycle1" column="cycle1"/>
+        <result property="cycle2" column="cycle2"/>
+        <result property="cycle3" column="cycle3"/>
+        <result property="mold_closing" column="mold_closing"/>
     </resultMap>
 
     <!--新增保存数据-->
     <insert id="insertMessage" parameterType="com.ruoyi.quartz.domain.Message">
-        insert into ${table} (equipment_id,light,status_value, time, DI_1, DI_2, DI_3, DI_4, DI_5, DI_6, DI_7, DI_8, cycle,original_information)
-        values (#{equipmentId},#{light},#{status_value},#{time},#{DI_1},#{DI_2},#{DI_3},#{DI_4},#{DI_5},#{DI_6},#{DI_7},#{DI_8},#{cycle},#{original_information})
+        insert into ${table} (equipment_id,light,status_value, time, DI_1, DI_2, DI_3, DI_4, DI_5, DI_6, DI_7, DI_8, cycle1, cycle2, cycle3, mold_closing, original_information, time_stamp)
+        values (#{equipmentId},#{light},#{status_value},#{time},#{DI_1},#{DI_2},#{DI_3},#{DI_4},#{DI_5},#{DI_6},#{DI_7},#{DI_8},#{cycle1},#{cycle2},#{cycle3},#{mold_closing},#{original_information},#{time_stamp})
     </insert>
 
     <select id="existTable" parameterType="String" resultType="Integer">
@@ -51,8 +55,13 @@
             DI_6                 varchar(10),
             DI_7                 varchar(10),
             DI_8                 varchar(10),
-            cycle                varchar(50),
+            cycle1               int(11),
+            cycle2               int(11),
+            cycle3               int(11),
+            mold_closing         int(11),
             original_information varchar(50),
+            time_stamp           varchar(50)
+
         )
     </update>
 

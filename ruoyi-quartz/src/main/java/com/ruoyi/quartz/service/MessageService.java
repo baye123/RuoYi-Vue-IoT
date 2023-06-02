@@ -15,5 +15,5 @@ public interface MessageService {
      * @param message 消息信息
      * @return 结果
      */
-    public int insertMessage(Message message);
+    public  int insertMessage(Message message);
 }

@@ -13,6 +13,8 @@ public class Message extends BaseEntity {
 
     private Long id;
 
+    private long  time_stamp;//时间戳
+
     private String IP;
 
     @Excel(name = "设备名称")
@@ -48,7 +50,11 @@ public class Message extends BaseEntity {
     @Excel(name = "原始消息" ,width = 30)
     private String original_information; //原始消息
 
-    private String cycle;//合模周期
+    private int cycle1;//合模周期
+
+    private int cycle2;//合模间隔周期
+
+    private int cycle3;//第一次合模开始到第二次合模开始大周期
 
     private int mold_closing; //合模次数
 
@@ -58,6 +64,14 @@ public class Message extends BaseEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public long getTime_stamp() {
+        return time_stamp;
+    }
+
+    public void setTime_stamp(long time_stamp) {
+        this.time_stamp = time_stamp;
     }
 
     public String getIP() {
@@ -180,12 +194,28 @@ public class Message extends BaseEntity {
         this.original_information = original_information;
     }
 
-    public String getCycle() {
-        return cycle;
+    public int getCycle1() {
+        return cycle1;
     }
 
-    public void setCycle(String cycle) {
-        this.cycle = cycle;
+    public void setCycle1(int cycle1) {
+        this.cycle1 = cycle1;
+    }
+
+    public int getCycle2() {
+        return cycle2;
+    }
+
+    public void setCycle2(int cycle2) {
+        this.cycle2 = cycle2;
+    }
+
+    public int getCycle3() {
+        return cycle3;
+    }
+
+    public void setCycle3(int cycle3) {
+        this.cycle3 = cycle3;
     }
 
     public int getMold_closing() {

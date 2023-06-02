@@ -27,12 +27,15 @@ public class RabbitUtil {
 //        String host = properties.getProperty("rabbit.host");
 //        String username = properties.getProperty("rabbit.username");
 //        String password = properties.getProperty("rabbit.password");
+        String host = "192.168.1.30";
+        String username = "test";
+        String password = "test";
 
         // 连接工厂
         ConnectionFactory connectionFactory = new ConnectionFactory();
-//        connectionFactory.setHost(host);
-//        connectionFactory.setUsername(username);
-//        connectionFactory.setPassword(password);
+        connectionFactory.setHost(host);
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
 
         // 建立连接和信道
         Connection connection = connectionFactory.newConnection();
