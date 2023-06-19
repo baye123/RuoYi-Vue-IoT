@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.PlanMapper">
+    <resultMap id="PlanVoResult" type="com.ruoyi.web.domain.vo.PlanVo">
+        <id property="id" column="id"/>
+        <result property="cpo" column="cpo"/>
+        <result property="product_id" column="product_id"/>
+        <result property="device_id" column="device_id"/>
+        <result property="device_type" column="device_type"/>
+        <result property="workshop" column="workshop"/>
+        <result property="mold_id" column="mold_id"/>
+        <result property="production_start_time" column="production_start_time"/>
+        <result property="production_end_time" column="production_end_time"/>
+        <result property="produce_number" column="produce_number"/>
+        <result property="production_status" column="production_status"/>
+        <result property="planned_production_quantity" column="planned_production_quantity"/>
+        <result property="actual_production_quantity" column="actual_production_quantity"/>
+        <result property="produce_cycle" column="produce_cycle"/>
+        <result property="actual_cycle" column="actual_cycle"/>
+        <result property="refresh_time" column="refresh_time"/>
+        <result property="difference_value" column="difference_value"/>
+        <result property="difference_proportion" column="difference_proportion"/>
+
+    </resultMap>
+
+    <sql id="selectPlanVo">
+        SELECT *
+        from
+            (
+                SELECT
+                    pp.id,
+                    pp.cpo,
+                    pp.product_id,
+                    pp.device_id,
+                    d.device_type,
+                    d.workshop,
+                    pp.mold_id,
+                    pp.production_start_time,
+                    pp.production_end_time,
+                    pp.production_status,
+                    pp.planned_production_quantity,
+                    pp.actual_production_quantity,
+                    pp.difference_proportion,
+                    pp.actual_cycle,
+                    pp.refresh_time
+
+                FROM
+                    planned_production AS pp,
+                    device AS d
+                WHERE pp.device_id = d.device_id
+            ) as temp
+    </sql>
+
+    <select id="selectPlanVoList" parameterType="PlanVo" resultMap="PlanVoResult">
+        SELECT *
+        from
+        (
+        SELECT
+        pp.id,
+        pp.cpo,
+        pp.product_id,
+        pp.device_id,
+        d.device_type,
+        d.workshop,
+        pp.mold_id,
+        pp.production_start_time,
+        pp.production_end_time,
+        pp.production_status,
+        pp.planned_production_quantity,
+        pp.actual_production_quantity,
+        pp.difference_proportion,
+        pp.actual_cycle,
+        pp.refresh_time
+
+        FROM
+        planned_production AS pp,
+        device AS d
+        WHERE pp.device_id = d.device_id
+        ) as temp
+        where 1=1
+        <if test='product_id!= null'>
+            and temp.product_id = #{product_id}
+        </if>
+        <if test='device_id!= null'>
+            and temp.device_id = #{device_id}
+        </if>
+        <if test='device_type!= null'>
+            and temp.device_type = #{device_type}
+        </if>
+        <if test='mold_id!= null'>
+            and temp.mold_id = #{mold_id}
+        </if>
+        <if test="production_status!= null and production_status != 0" >
+            and temp.production_status = #{production_status}
+        </if>
+        <if test="cpo != null">
+            and temp.cpo = #{cpo}
+        </if>
+    </select>
+    <select id="selectPlanVoList2" parameterType="PlanVo" resultMap="PlanVoResult">
+        SELECT *
+        from
+            (
+                SELECT
+                    pp.id,
+                    pp.cpo,
+                    pp.product_id,
+                    pp.device_id,
+                    d.device_type,
+                    d.workshop,
+                    pp.mold_id,
+                    pp.production_start_time,
+                    pp.production_end_time,
+                    pp.production_status,
+                    pp.planned_production_quantity,
+                    pp.actual_production_quantity,
+                    pp.difference_proportion,
+                    pp.actual_cycle,
+                    pp.refresh_time
+
+                FROM
+                    planned_production AS pp,
+                    device AS d
+                WHERE pp.device_id = d.device_id
+            ) as temp
+        where 1=1
+    </select>
+
+    <select id="selectPlanVoById" parameterType="String" resultMap="PlanVoResult">
+        <include refid="selectPlanVo"/>
+        where temp.device_id = #{device_id}
+        and temp.product_id = #{product_id}
+        and temp.cpo =#{cpo}
+    </select>
+
+    <select id="checkPlanIdUnique" parameterType="String" resultMap="PlanVoResult">
+        <include refid="selectPlanVo"/>
+        where temp.product_id = #{product_id}
+        and temp.device_id = #{device_id}
+        and temp.cpo = #{cpo}
+        limit 1
+    </select>
+
+    <select id="getQuantityByTime" parameterType="String" resultType="Integer">
+       select count(*) from ${table}
+        where time > #{time1} and time &lt; #{time2} and mold_closing = "1"
+    </select>
+
+    <select id="getCycle3ByTime" parameterType="String" resultType="Integer">
+        SELECT cycle3 from ${table}
+        where time = (SELECT max(time) FROM ${table} where time > #{time1}
+            and time &lt; #{time2} and mold_closing = "1")
+        and mold_closing = "1"
+    </select>
+
+    <update id="updatePlanVo" parameterType="PlanVo">
+        update planned_production
+        <set>
+            <if test="id != null and id != 0">id = #{id},</if>
+            <if test="cpo != null and cpo !=''">cpo = #{cpo},</if>
+            <if test="product_id != null and product_id != ''">product_id = #{product_id},</if>
+            <if test="device_id != null and device_id != ''">device_id = #{device_id},</if>
+            <if test="production_start_time != null and production_start_time != ''">production_start_time = #{production_start_time},</if>
+            <if test="production_end_time != null and production_end_time != ''">production_end_time = #{production_end_time},</if>
+            <if test="planned_production_quantity !=null and planned_production_quantity != ''">planned_production_quantity = #{planned_production_quantity}</if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updatePlanVo2" parameterType="PlanVo">
+        update planned_production
+        <set>
+            <if test="id != null and id != 0">id = #{id},</if>
+            <if test="cpo != null and cpo !=''">cpo = #{cpo},</if>
+            <if test="product_id != null and product_id != ''">product_id = #{product_id},</if>
+            <if test="device_id != null and device_id != ''">device_id = #{device_id},</if>
+            <if test="production_start_time != null and production_start_time != ''">production_start_time = #{production_start_time},</if>
+            <if test="production_end_time != null and production_end_time != ''">production_end_time = #{production_end_time},</if>
+            <if test="production_status !=null and production_status !=''">production_status = #{production_status},</if>
+            <if test="planned_production_quantity !=null and planned_production_quantity != ''">planned_production_quantity = #{planned_production_quantity},</if>
+            <if test="actual_production_quantity !=null and actual_production_quantity != ''">actual_production_quantity = #{actual_production_quantity},</if>
+            <if test="difference_value !=null and difference_value !=''">difference_value = #{difference_value},</if>
+            <if test="actual_cycle !=null and actual_cycle !=''">actual_cycle = #{actual_cycle},</if>
+            <if test="difference_proportion !=null and difference_proportion !=''">difference_proportion = #{difference_proportion},</if>
+            refresh_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="insertPlanVo" parameterType="PlanVo" useGeneratedKeys="true" keyProperty="id">
+        insert into planned_production(
+        <if test="id != null and id != 0">id,</if>
+        <if test="cpo != null and cpo !=''">cpo,</if>
+        <if test="product_id != null and product_id != ''">product_id,</if>
+        <if test="device_id !=null">device_id,</if>
+        <if test="production_start_time != null and production_start_time != ''">production_start_time,</if>
+        <if test="production_end_time != null and production_end_time != ''">production_end_time,</if>
+        <if test="planned_production_quantity != null and planned_production_quantity != ''">planned_production_quantity</if>
+
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="cpo != null and cpo !=''">#{cpo},</if>
+        <if test="product_id != null and product_id != ''">#{product_id},</if>
+        <if test="device_id !=null">#{device_id},</if>
+        <if test="production_start_time != null and production_start_time != ''">#{production_start_time},</if>
+        <if test="production_end_time != null and production_end_time != ''">#{production_end_time},</if>
+        <if test="planned_production_quantity != null and planned_production_quantity != ''">#{planned_production_quantity}</if>
+        )
+    </insert>
+    <delete id="PlanVoById" parameterType="String">
+        delete from planned_production
+               where product_id in
+        <foreach collection="product_id" item="product_id" open="(" separator="," close=")">
+            #{product_id}
+        </foreach>
+        and
+                   device_id in
+        <foreach collection="device_id" item="device_id" open="(" separator="," close=")">
+            #{device_id}
+        </foreach>
+        and
+        cpo in
+        <foreach collection="cpo" item="cpo" open="(" separator="," close=")">
+            #{device_id}
+        </foreach>
+    </delete>
+
+
+</mapper>

@@ -29,6 +29,10 @@ public class InformationServiceImpl implements InformationService {
     public List<Device> selectDeviceList(Device device){
         return informationMapper.selectDeviceList(device);
     }
+    @Override
+    public List<Device> selectDevice_idList(){
+        return informationMapper.selectDevice_idList();
+    }
     /**
      * 通过设备编号查询设备信息
      *
@@ -89,5 +93,9 @@ public class InformationServiceImpl implements InformationService {
     public int deleteDeviceByDevice_ids(String[] device_ids)
     {
         return informationMapper.DeviceByDevice_ids(device_ids);
+    }
+    @Override
+    public String getIpByDevice_id(String device_id){
+        return informationMapper.getIpByDevice_id(device_id);
     }
 }

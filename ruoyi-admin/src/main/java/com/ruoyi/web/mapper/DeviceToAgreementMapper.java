@@ -29,8 +29,8 @@ public interface DeviceToAgreementMapper {
     /**
      * 通过协议编号查询协议信息
      *
-     * @param agreement_id 设备编号
-     * @return 设备对象信息
+     * @param agreement_id 协议编号
+     * @return 设备协议对象信息
      */
     public Device_to_agreementVo selectDevice_to_agreementVoByAgreement_id(String agreement_id);
     /**
@@ -54,4 +54,12 @@ public interface DeviceToAgreementMapper {
      * @return 结果
      */
     public int Device_to_agreementVoByAgreement_ids(String[] agreement_ids);
+
+    /**
+     * 通过设备编号查询协议信息
+     *
+     * @param device_id 设备编号
+     * @return 设备协议对象信息
+     */
+    public Device_to_agreementVo selectDevice_to_agreementVoByDevice_id(String device_id);
 }

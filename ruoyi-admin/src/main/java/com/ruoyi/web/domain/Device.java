@@ -22,6 +22,8 @@ public class Device extends BaseEntity {
 
     private String device_status;//设备状态
 
+    private String workshop; //所在车间名称
+
     private String manufacture_date;//制造日期
 
     private String burchasing_date;//购买日期
@@ -80,6 +82,14 @@ public class Device extends BaseEntity {
 
     public void setDevice_status(String device_status) {
         this.device_status = device_status;
+    }
+
+    public String getWorkshop() {
+        return workshop;
+    }
+
+    public void setWorkshop(String workshop) {
+        this.workshop = workshop;
     }
 
     public String getManufacture_date() {

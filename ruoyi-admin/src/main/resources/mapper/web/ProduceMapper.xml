@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.ProduceMapper">
+    <resultMap id="ProduceResult" type="com.ruoyi.web.domain.Produce">
+        <result property="cpo" column="cpo"/>
+        <result property="product_id" column="product_id"/>
+        <result property="device_id" column="device_id"/>
+        <result property="mold_id" column="mold_id"/>
+        <result property="dotime" column="dotime"/>
+        <result property="endtime" column="endtime"/>
+        <result property="dowid" column="dowid"/>
+        <result property="endwid" column="endwid"/>
+        <result property="worksheet" column="worksheet"/>
+        <result property="downcls" column="downcls"/>
+        <result property="planned_production_quantity" column="planned_production_quantity"/>
+        <result property="numrp" column="numrp"/>
+        <result property="actual_production_quantity" column="actual_production_quantity"/>
+        <result property="difference_proportion" column="difference_proportion"/>
+        <result property="refresh_time" column="refresh_time"/>
+        <result property="actual_cycle" column="actual_cycle"/>
+        <result property="device_type" column="device_type"/>
+    </resultMap>
+
+    <select id="selectProduceList" parameterType="Produce" resultMap="ProduceResult">
+        SELECT *
+        from
+        (
+        SELECT
+        pp.cpo,
+        pp.product_id,
+        pp.device_id,
+        pp.mold_id,
+        d.device_type,
+        d.workshop,
+        s.dotime,
+        s.dowid,
+        s.endtime,
+        s.endwid,
+        s.worksheet,
+        s.downcls,
+        pp.planned_production_quantity,
+        pp.numrp,
+        pp.difference_value,
+        pp.difference_proportion,
+        pp.actual_production_quantity,
+        pp.refresh_time
+
+        FROM
+        planned_production AS pp,
+        shpmachud AS s,
+        device AS d
+        WHERE s.cls = "生产" and pp.cpo = s.cpo and d.device_id = pp.device_id
+        ) as temp
+        where 1=1
+        <if test='cpo!= null'>
+            and cpo = #{cpo}
+        </if>
+        <if test='device_id!= null'>
+            and device_id = #{device_id}
+        </if>
+        <if test='mold_id!= null'>
+            and mold_id = #{mold_id}
+        </if>
+        <if test='product_id!= null'>
+            and product_id = #{product_id}
+        </if>
+        <if test='workshop != null'>
+            and workshop = #{workshop}
+        </if>
+        ORDER BY
+        temp.difference_value desc
+    </select>
+
+    <select id="selectProduceList2" parameterType="Produce" resultMap="ProduceResult">
+        SELECT *
+        from
+        (
+        SELECT
+        pp.cpo,
+        pp.product_id,
+        pp.device_id,
+        d.device_type,
+        pp.mold_id,
+        d.workshop,
+        s.dotime,
+        s.dowid,
+        s.endtime,
+        s.endwid,
+        s.worksheet,
+        s.downcls,
+        pp.planned_production_quantity,
+        pp.numrp,
+        pp.difference_value,
+        pp.actual_production_quantity,
+        pp.difference_proportion,
+        pp.refresh_time
+
+        FROM
+        planned_production AS pp,
+        shpmachud AS s,
+        device AS d
+        WHERE s.cls = "生产" and pp.cpo = s.cpo and d.device_id = pp.device_id
+        ) as temp
+        where 1=1
+    </select>
+
+    <select id="getQuantityByTime" parameterType="String" resultType="Integer">
+        select count(*) from ${table}
+        where time > #{time1} and time &lt; #{time2} and mold_closing = "1"
+    </select>
+
+    <select id="getCycle3ByTime" parameterType="String" resultType="Integer">
+        SELECT cycle3 from ${table}
+        where time = (SELECT max(time) FROM ${table} where time > #{time1}
+          and time &lt; #{time2} and mold_closing = "1")
+          and mold_closing = "1"
+    </select>
+</mapper>

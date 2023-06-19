@@ -19,6 +19,8 @@ public class Device_to_agreementVo extends BaseEntity {
 
     private String device_name;//设备名称
 
+    private String ip; //Iot设备的IP地址
+
     public Long getId() {
         return id;
     }
@@ -57,5 +59,13 @@ public class Device_to_agreementVo extends BaseEntity {
 
     public void setDevice_name(String device_name) {
         this.device_name = device_name;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

@@ -89,4 +89,5 @@ public class DeviceToAgreementController extends BaseController {
         return toAjax(deviceToAgreementService.deleteDevice_to_agreementVoByAgreement_ids(agreement_ids));
     }
 
+
 }

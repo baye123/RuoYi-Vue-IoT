@@ -95,4 +95,9 @@ public class DeviceToAgreementServiceImpl implements DeviceToAgreementService {
         return deviceToAgreementMapper.Device_to_agreementVoByAgreement_ids(agreement_ids);
     }
 
+    @Override
+    public Device_to_agreementVo selectDevice_to_agreementVoByDevice_id(String device_id){
+        return deviceToAgreementMapper.selectDevice_to_agreementVoByDevice_id(device_id);
+    }
+
 }

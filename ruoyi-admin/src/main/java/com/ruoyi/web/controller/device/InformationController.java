@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.device;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysDictType;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysPost;
@@ -12,6 +13,7 @@ import com.ruoyi.web.service.InformationService;
 import com.ruoyi.web.service.SocketMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,6 +91,15 @@ public class InformationController extends BaseController {
     public AjaxResult remove(@PathVariable String[] device_ids)
     {
         return toAjax(informationService.deleteDeviceByDevice_ids(device_ids));
+    }
+    /**
+     * 获取设备编号列表
+     */
+    @GetMapping("/device_idlist")
+    public AjaxResult optionselect()
+    {
+        List<Device> device_idList = informationService.selectDevice_idList();
+        return success(device_idList);
     }
 
 }

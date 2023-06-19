@@ -86,18 +86,18 @@
                 </exclusions>
             </dependency>
 
-            <!--        RabbitMQ消息队列依赖-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-amqp</artifactId>
-            </dependency>
+<!--            &lt;!&ndash;        RabbitMQ消息队列依赖&ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-starter-amqp</artifactId>-->
+<!--            </dependency>-->
 
-            <!--        rabbitmq 依赖客户端-->
-            <dependency>
-                <groupId>com.rabbitmq</groupId>
-                <artifactId>amqp-client</artifactId>
-                <version>5.8.0</version>
-            </dependency>
+<!--            &lt;!&ndash;        rabbitmq 依赖客户端&ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>com.rabbitmq</groupId>-->
+<!--                <artifactId>amqp-client</artifactId>-->
+<!--                <version>5.8.0</version>-->
+<!--            </dependency>-->
 
             <!-- io常用工具类 -->
             <dependency>

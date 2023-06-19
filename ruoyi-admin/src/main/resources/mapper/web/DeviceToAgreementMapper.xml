@@ -10,12 +10,13 @@
         <result property="agreement_type" column="agreement_type"/>
         <result property="device_id" column="device_id"/>
         <result property="device_name" column="device_name"/>
+        <result property="ip" column="ip"/>
     </resultMap>
     <sql id="selectDevice_to_agreementVo">
         SELECT *
         from
             (
-                select a.agreement_id,a.agreement_type,d.device_id,d.device_name
+                select a.agreement_id,a.agreement_type,d.device_id,d.device_name,a.ip
                 from agreement as a,
                      device as d,
                      device_to_agreement as t
@@ -27,7 +28,7 @@
         SELECT *
         from
         (
-        select a.agreement_id,a.agreement_type,d.device_id,d.device_name
+        select a.agreement_id,a.agreement_type,d.device_id,d.device_name,a.ip
         from agreement as a,
         device as d,
         device_to_agreement as t
@@ -57,9 +58,13 @@
         <include refid="selectDevice_to_agreementVo"/>
         where temp.agreement_id=#{agreement_id}
     </select>
+    <select id="selectDevice_to_agreementVoByDevice_id" parameterType="String" resultMap="Device_to_agreementVoResult">
+        <include refid="selectDevice_to_agreementVo"/>
+        where temp.device_id=#{device_id}
+    </select>
     <insert id="insertDevice_to_agreementVo" parameterType="Device_to_agreementVo" useGeneratedKeys="true" keyProperty="id">
-        insert into Device_to_agreement(
-        <if test="id != null and id != 0">id</if>
+        insert into device_to_agreement(
+        <if test="id != null and id != 0">id,</if>
         <if test="agreement_id != null and agreement_id != ''">agreement_id,</if>
         <if test="device_id !=null">device_id</if>
         )values(
@@ -70,7 +75,7 @@
     </insert>
 
     <update id="updateDevice_to_agreementVo" parameterType="Device_to_agreementVo">
-        update Device_to_agreement
+        update device_to_agreement
         <set>
             <if test="id != null and id != 0">id = #{id},</if>
             <if test="agreement_id != null and agreement_id != ''">agreement_id = #{agreement_id},</if>
@@ -80,11 +85,11 @@
     </update>
 
     <delete id="Device_to_agreementVoByAgreement_ids" parameterType="String">
-        delete from Device_to_agreement where agreement_id in
+        delete from device_to_agreement where agreement_id in
         <foreach collection="array" item="agreement_id" open="(" separator="," close=")">
             #{agreement_id}
         </foreach>
-    </delete>
+</delete>
 
 
 </mapper>

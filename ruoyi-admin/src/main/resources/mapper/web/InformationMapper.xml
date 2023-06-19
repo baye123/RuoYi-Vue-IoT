@@ -11,6 +11,7 @@
         <result property="device_type" column="device_type"/>
         <result property="device_brand" column="device_brand"/>
         <result property="device_status" column="device_status"/>
+        <result property="workshop" column="workshop"/>
         <result property="manufacture_date" column="manufacture_date"/>
         <result property="burchasing_date" column="burchasing_date"/>
         <result property="create_by" column="create_by"/>
@@ -19,12 +20,12 @@
         <result property="update_time" column="update_time"/>
     </resultMap>
     <sql id="selectDevice">
-        select id,device_id,device_name,device_type,device_brand,device_status,manufacture_date,burchasing_date,create_by,create_time
+        select id,device_id,device_name,device_type,device_brand,device_status,workshop,manufacture_date,burchasing_date,create_by,create_time
         from device
     </sql>
 
     <select id="selectDeviceList" parameterType="Device" resultMap="DeviceResult">
-        select id,device_id,device_name,device_type,device_brand,device_status,manufacture_date,burchasing_date,create_by,create_time from device
+        select id,device_id,device_name,device_type,device_brand,device_status,workshop,manufacture_date,burchasing_date,create_by,create_time from device
         where 1=1
         <if test='device_id!= null'>
             and device_id = #{device_id}
@@ -36,6 +37,12 @@
             and device_status = #{device_status}
         </if>
     </select>
+    <select id="selectDevice_idList" parameterType="Device" resultMap="DeviceResult">
+        select device_id,device_type
+        from device
+        where 1=1
+
+    </select>
 
     <select id="checkInformationIdUnique" parameterType="String" resultMap="DeviceResult">
         <include refid="selectDevice"/>
@@ -46,6 +53,22 @@
         <include refid="selectDevice"/>
         where device_id=#{device_id}
     </select>
+    <select id="getIpByDevice_id" parameterType="String" resultType="String">
+        select temp.ip
+        from
+            (select
+                 d.device_id,
+                 d.device_type,
+                 a.ip
+             FROM
+                 agreement as a,
+                 device as d,
+                 device_to_agreement as da
+             where
+                 d.device_id = da.device_id and da.agreement_id = a.agreement_id
+            )as temp
+        where temp.device_id = #{device_id}
+    </select>
     <insert id="insertDevice" parameterType="Device" useGeneratedKeys="true" keyProperty="id">
         insert into device(
         <if test="id != null and id != 0">id,</if>
@@ -54,6 +77,7 @@
         <if test="device_type != null">device_type,</if>
         <if test="device_brand != null and device_brand != ''">device_brand,</if>
         <if test="device_status != null and device_status != ''">device_status,</if>
+        <if test="workshop != null and workshop != ''">workshop,</if>
         <if test="manufacture_date != null and manufacture_date != ''">manufacture_date,</if>
         <if test="burchasing_date != null and burchasing_date != ''">burchasing_date,</if>
         <if test="create_by != null and create_by != ''">create_by,</if>
@@ -65,6 +89,7 @@
         <if test="device_type != null">#{device_type},</if>
         <if test="device_brand != null and device_brand != ''">#{device_brand},</if>
         <if test="device_status != null and device_status != ''">#{device_status},</if>
+        <if test="workshop != null and workshop != ''">#{workshop},</if>
         <if test="manufacture_date != null and manufacture_date != ''">#{manufacture_date},</if>
         <if test="burchasing_date != null and burchasing_date != ''">#{burchasing_date},</if>
         <if test="create_by != null and create_by != ''">#{create_by},</if>
@@ -80,6 +105,7 @@
             <if test="device_type != null">device_type = #{device_type},</if>
             <if test="device_brand != null and device_brand != ''">device_brand = #{device_brand},</if>
             <if test="device_status != null and device_status != ''">device_status = #{device_status},</if>
+            <if test="workshop != null and workshop != ''">workshop = #{workshop},</if>
             <if test="manufacture_date != null and manufacture_date != ''">manufacture_date = #{manufacture_date},</if>
             <if test="burchasing_date != null and burchasing_date != ''">burchasing_date = #{burchasing_date},</if>
             <if test="update_by != null and update_by != ''">update_by = #{update_by},</if>

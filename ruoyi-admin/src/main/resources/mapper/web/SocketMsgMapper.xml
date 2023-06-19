@@ -11,9 +11,9 @@
         <result property="time" column="time"/>
         <!--        <result property="status" column="status"/>-->
         <!--        <result property="cause" column="cause"/>-->
-        <result property="exchangName" column="exchang_name"/>
-        <result property="routingKey" column="routing_key"/>
-        <result property="queueName" column="queue_name"/>
+<!--        <result property="exchangName" column="exchang_name"/>-->
+<!--        <result property="routingKey" column="routing_key"/>-->
+<!--        <result property="queueName" column="queue_name"/>-->
         <result property="DI_1" column="DI_1"/>
         <result property="DI_2" column="DI_2"/>
         <result property="DI_3" column="DI_3"/>

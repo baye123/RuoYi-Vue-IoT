@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.web.mapper.IotMessageMapper">
+    <resultMap id="IotMessageResult" type="com.ruoyi.web.domain.vo.IotMessage">
+        <id property="id" column="id"/>
+        <result property="device_id" column="device_id"/>
+        <result property="device_type" column="device_type"/>
+        <result property="time" column="time"/>
+        <result property="status_value" column="status_value"/>
+        <result property="agreement_id" column="agreement_id"/>
+        <result property="ip" column="ip"/>
+        <result property="action" column="action"/>
+        <result property="illustrate" column="illustrate"/>
+    </resultMap>
+
+    <select id="selectIotMessageList" parameterType="IotMessage" resultMap="IotMessageResult">
+        SELECT
+            temp.device_id,
+            temp.device_type,
+            temp.ip,
+            e.time,
+            e.status_value
+        from
+            (select
+                 d.device_id,
+                 d.device_type,
+                 a.ip
+             FROM
+                 agreement as a,
+                 device as d,
+                 device_to_agreement as da
+             where
+                 d.device_id = da.device_id and da.agreement_id = a.agreement_id
+            ) as temp,
+            ${tableName} as e
+        where e.mold_closing = 1 and temp.ip = e.equipment_id
+        <if test='params.beginTime != null and params.endTime != null'>
+            and time between #{params.beginTime}  and #{params.endTime}
+        </if>
+    </select>
+
+</mapper>

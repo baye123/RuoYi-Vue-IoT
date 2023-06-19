@@ -54,4 +54,12 @@ public interface DeviceToAgreementService {
      * @return 结果
      */
     public int deleteDevice_to_agreementVoByAgreement_ids(String[] agreement_ids);
+    /**
+     * 通过设备id查询IoT模块ip
+     *
+     * @Param device_id 设备编号
+     * @return
+     */
+    public Device_to_agreementVo selectDevice_to_agreementVoByDevice_id(String device_id);
+
 }

@@ -20,6 +20,12 @@ public interface InformationService {
      */
     public List<Device> selectDeviceList(Device device);
     /**
+     * 查询设备编号列表
+     * @param device
+     * @return
+     */
+    public List<Device> selectDevice_idList();
+    /**
      * 校验设备编码
      *
      * @param device 设备信息
@@ -55,4 +61,6 @@ public interface InformationService {
      * @return 结果
      */
     public int deleteDeviceByDevice_ids(String[] device_ids);
+
+    public String getIpByDevice_id(String device_id);
 }

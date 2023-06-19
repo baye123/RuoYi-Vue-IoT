@@ -20,7 +20,13 @@ public interface InformationMapper {
      * @return 设备集合
      */
     public List<Device> selectDeviceList(Device device);
-
+    /**
+     * 查询设备编号列表
+     *
+     * @param
+     * @return 设备集合
+     */
+    public List<Device> selectDevice_idList();
     /**
      * 校验设备编码
      *
@@ -56,4 +62,6 @@ public interface InformationMapper {
      * @return 结果
      */
     public int DeviceByDevice_ids(String[] device_ids);
+
+    public String getIpByDevice_id(String device_id);
 }
