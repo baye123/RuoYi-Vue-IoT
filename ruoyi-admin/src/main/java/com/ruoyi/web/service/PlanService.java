@@ -20,6 +20,12 @@ public interface PlanService {
     public List<PlanVo> selectPlanVoList(PlanVo planVo);
 
     public List<PlanVo> selectPlanVoList2();
+    /**查询生产状态为生产中的计划生产列表
+     *
+     * @param
+     * @return
+     */
+    public List<PlanVo> selectPlanVoList3();
 
     /**查询计划生产列表详细
      *

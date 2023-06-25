@@ -45,5 +45,25 @@ public class ToyoMessageServiceImpl implements ToyoMessageService {
         PageUtils.startPage();
         return toyoMessageMapper.selectToyoMessageList(toyoMessage);
     }
+    public List<ToyoMessage> selectToyoMessageList2(ToyoMessage toyoMessage){
+        String tableName = new String();
+        if(toyoMessage.getDevice_no().equals("A-037|Z2022-715")){
+            tableName = "im_data.im37_33molding";
+        }
+        else if(toyoMessage.getDevice_no().equals("A-038|Z2022-716")){
+            tableName = "im_data.im38_33molding";
+        }
+        else if(toyoMessage.getDevice_no().equals("A-039|Z2020-601")){
+            tableName = "im_data.im39_33molding";
+        }
+        else if(toyoMessage.getDevice_no().equals("A-041|Z2020-603")){
+            tableName = "im_data.im41_33molding";
+        }
+
+        toyoMessage.setDevice_no(tableName);
+
+
+        return toyoMessageMapper.selectToyoMessageList(toyoMessage);
+    }
 
 }

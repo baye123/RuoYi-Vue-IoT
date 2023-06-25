@@ -23,6 +23,8 @@ public interface PlanMapper {
     public List<PlanVo> selectPlanVoList(PlanVo planVo);
 
     public List<PlanVo> selectPlanVoList2();
+
+    public List<PlanVo> selectPlanVoList3();
     /**
      * 通过产品编号和设备编号查询计划生产信息
      *

@@ -36,7 +36,7 @@
         <if test='mold_id!= null'>
             and mold_id = #{mold_id}
         </if>
-
+        order by cpo desc, dotime desc
     </select>
     <select id="selectShpmachudList2" parameterType="Shpmachud" resultMap="ShpmachudResult">
         select * from shpmachud
@@ -49,8 +49,7 @@
         where device_id = #{device_id}
         and product_id = #{product_id}
         and cpo =#{cpo}
-        and cls = "生产"
-        limit 1
+        and cls !="随机设备维修" and cls !="下模" and cls !="等待下模" and cls !="试模" and cls !="模具维修"
     </select>
 
     <update id="updateShpmachud2" parameterType="Shpmachud">
@@ -60,6 +59,14 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="selectShpmachudByDevice_idAndTime" parameterType="String" resultMap="ShpmachudResult">
+        select *
+        FROM
+            shpmachud
+        where device_id = #{device_id}
+        ORDER BY abs(UNIX_TIMESTAMP(dotime)-UNIX_TIMESTAMP(#{dotime})) LIMIT 1
+    </select>
 
 
 

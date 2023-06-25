@@ -33,6 +33,10 @@ public class PlanServiceImpl implements PlanService {
     public List<PlanVo> selectPlanVoList2(){
         return planMapper.selectPlanVoList2();
     }
+    @Override
+    public List<PlanVo> selectPlanVoList3(){
+        return planMapper.selectPlanVoList3();
+    }
 
     @Override
     public PlanVo selectPlanVoById(String product_id,String device_id,String cpo){

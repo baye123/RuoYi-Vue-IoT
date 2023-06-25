@@ -29,6 +29,8 @@ public class Shpmachud extends BaseEntity {
 
     private String endwid; //结案人
 
+    private String worksheet; //穴数
+
     private String downcls; // 总耗时
 
     public Long getId() {
@@ -109,6 +111,14 @@ public class Shpmachud extends BaseEntity {
 
     public void setEndwid(String endwid) {
         this.endwid = endwid;
+    }
+
+    public String getWorksheet() {
+        return worksheet;
+    }
+
+    public void setWorksheet(String worksheet) {
+        this.worksheet = worksheet;
     }
 
     public String getDowncls() {

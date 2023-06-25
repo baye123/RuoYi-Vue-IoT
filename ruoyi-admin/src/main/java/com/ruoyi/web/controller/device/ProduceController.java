@@ -58,101 +58,101 @@ public class ProduceController extends BaseController {
     }
 
     //实时更新计算周期于合模次数
-    public void updateProductionData() throws Exception {
-        long stime = System.currentTimeMillis();
-        List<Produce> produceList = produceService.selectProduceList2();
-        //当前时间
-//        long millisecond = System.currentTimeMillis();
-//        String time_now = DateString.millisecondToStringLong(millisecond);
-
-        for (Produce o : produceList) {
-            //当前时间
-            long millisecond = System.currentTimeMillis();
-            String time_now = DateString.millisecondToStringLong(millisecond);
-            //确保上模之后才需要计算
-            //获取设备id
-            String device_id = o.getDevice_id();
-            //获取料号
-            String product_id = o.getProduct_id();
-            //获取节点
-            String cpo = o.getCpo();
-            //获取plan对象
-            PlanVo planVo = planService.selectPlanVoById(product_id,device_id,cpo);
-            //获取Shpmachud对象
-            Shpmachud shpmachud = shpmachudService.selectShpmachudById(product_id,device_id,cpo);
-
-            //获取设备协议关联对象
-            Device_to_agreementVo device_to_agreementVo = deviceToAgreementService.selectDevice_to_agreementVoByDevice_id(device_id);
-            if(device_to_agreementVo == null){
-                System.out.println("设备："+device_id +"存在问题，可能无协议连接，可能无设备信息。");
-                continue;
-            }
-            //获取设备关联IoT设备ip
-            String ip = device_to_agreementVo.getIp();
-            //获取设备表名
-            String table = "equipment_" + ip.replace('.', '_');
-//                o.setTable(table);
-            //获取时间段内的合模次数
-            String time1 = o.getDotime();
-            String time2 = "";
-            String time3 = "";
-            //有下模时间
-            if (o.getEndtime() != null) {
-                //判断是否到下模时间，到了则以下模时间为准，未到则以当前时间为准
-                time2 = o.getEndtime();
-                time3 = Time.CalTime(time1,time2);
-            } else {
-                //没有下模时间，直接以当前时间计算
-                time2 = time_now;
-                time3 = Time.CalTime(time1,time2);
-            }
-            if(shpmachud != null) {
-                shpmachud.setDowncls(time3);
-            }
-            //IoT合模次数
-            int mold_number = produceService.getQuantityByTime(table, time1, time2);
-            //取数
-            String number = o.getWorksheet();
-            String[] s = number.split("#");
-            int w;
-            if(s.length > 1){
-                w = Integer.valueOf(s[1]);
-            }
-            else {
-                w = Integer.valueOf(number);
-            }
-
-
-            int quantity = mold_number * w;
-            planVo.setActual_production_quantity(quantity);
-            //差异数
-            int difference_value = Math.abs(o.getNumrp() - quantity);
-            planVo.setDifference_value(difference_value);
-            //差异率
-            DecimalFormat dF = new DecimalFormat("0.00");
-            planVo.setDifference_proportion(dF.format((float)difference_value/o.getNumrp()*100) + "%");
-            //获取大周期
-            if(produceService.getCycle3ByTime(table, time1, time2) == null) {
-                planVo.setActual_cycle(0);
-            }
-            else{
-                planVo.setActual_cycle(produceService.getCycle3ByTime(table, time1, time2));
-            }
-
-
-
-//            System.out.println(o.toString());
-            //更新方法//
-            planService.updatePlanVo2(planVo);
-            if(shpmachud !=null){
-            shpmachudService.updateShpmachud2(shpmachud);
-            }
-        }
-        //for结束
-        long etime = System.currentTimeMillis();
-        System.out.printf("执行时长：%d 毫秒.", (etime - stime));
-
-    }
+//    public void updateProductionData() throws Exception {
+//        long stime = System.currentTimeMillis();
+//        List<Produce> produceList = produceService.selectProduceList2();
+//        //当前时间
+////        long millisecond = System.currentTimeMillis();
+////        String time_now = DateString.millisecondToStringLong(millisecond);
+//
+//        for (Produce o : produceList) {
+//            //当前时间
+//            long millisecond = System.currentTimeMillis();
+//            String time_now = DateString.millisecondToStringLong(millisecond);
+//            //确保上模之后才需要计算
+//            //获取设备id
+//            String device_id = o.getDevice_id();
+//            //获取料号
+//            String product_id = o.getProduct_id();
+//            //获取节点
+//            String cpo = o.getCpo();
+//            //获取plan对象
+//            PlanVo planVo = planService.selectPlanVoById(product_id,device_id,cpo);
+//            //获取Shpmachud对象
+////            Shpmachud shpmachud = shpmachudService.selectShpmachudById(product_id,device_id,cpo);
+//
+//            //获取设备协议关联对象
+//            Device_to_agreementVo device_to_agreementVo = deviceToAgreementService.selectDevice_to_agreementVoByDevice_id(device_id);
+//            if(device_to_agreementVo == null){
+//                System.out.println("设备："+device_id +"存在问题，可能无协议连接，可能无设备信息。");
+//                continue;
+//            }
+//            //获取设备关联IoT设备ip
+//            String ip = device_to_agreementVo.getIp();
+//            //获取设备表名
+//            String table = "equipment_" + ip.replace('.', '_');
+////                o.setTable(table);
+//            //获取时间段内的合模次数
+//            String time1 = o.getDotime();
+//            String time2 = "";
+//            String time3 = "";
+//            //有下模时间
+//            if (o.getEndtime() != null) {
+//                //判断是否到下模时间，到了则以下模时间为准，未到则以当前时间为准
+//                time2 = o.getEndtime();
+//                time3 = Time.CalTime(time1,time2);
+//            } else {
+//                //没有下模时间，直接以当前时间计算
+//                time2 = time_now;
+//                time3 = Time.CalTime(time1,time2);
+//            }
+//            if(shpmachud != null) {
+//                shpmachud.setDowncls(time3);
+//            }
+//            //IoT合模次数
+//            int mold_number = produceService.getQuantityByTime(table, time1, time2);
+//            //取数
+//            String number = o.getWorksheet();
+//            String[] s = number.split("#");
+//            int w;
+//            if(s.length > 1){
+//                w = Integer.valueOf(s[1]);
+//            }
+//            else {
+//                w = Integer.valueOf(number);
+//            }
+//
+//
+//            int quantity = mold_number * w;
+//            planVo.setActual_production_quantity(quantity);
+//            //差异数
+//            int difference_value = Math.abs(o.getNumrp() - quantity);
+//            planVo.setDifference_value(difference_value);
+//            //差异率
+//            DecimalFormat dF = new DecimalFormat("0.00");
+//            planVo.setDifference_proportion(dF.format((float)difference_value/o.getNumrp()*100) + "%");
+//            //获取大周期
+//            if(produceService.getCycle3ByTime(table, time1, time2) == null) {
+//                planVo.setActual_cycle(0);
+//            }
+//            else{
+//                planVo.setActual_cycle(produceService.getCycle3ByTime(table, time1, time2));
+//            }
+//
+//
+//
+////            System.out.println(o.toString());
+//            //更新方法//
+//            planService.updatePlanVo2(planVo);
+//            if(shpmachud !=null){
+//            shpmachudService.updateShpmachud2(shpmachud);
+//            }
+//        }
+//        //for结束
+//        long etime = System.currentTimeMillis();
+//        System.out.printf("执行时长：%d 毫秒.", (etime - stime));
+//
+//    }
 
     //实时更新计算机台流水总耗时
     public void updateShpmachudData() throws Exception {
@@ -194,6 +194,113 @@ public class ProduceController extends BaseController {
             //更新方法//
             shpmachudService.updateShpmachud2(o);
 
+        }
+        //for结束
+        long etime = System.currentTimeMillis();
+        System.out.printf("执行时长：%d 毫秒.", (etime - stime));
+
+    }
+    //实时更新计算周期于合模次数
+    public void updateProductionData2() throws Exception {
+        long stime = System.currentTimeMillis();
+
+        //获取任务单状态为生产中的列表
+        List<PlanVo> planVoList = planService.selectPlanVoList3();
+        //当前时间
+//        long millisecond = System.currentTimeMillis();
+//        String time_now = DateString.millisecondToStringLong(millisecond);
+
+        for (PlanVo o : planVoList) {
+
+            //当前时间
+            long millisecond = System.currentTimeMillis();
+            String time_now = DateString.millisecondToStringLong(millisecond);
+            //确保上模之后才需要计算
+            //获取设备id
+            String device_id = o.getDevice_id();
+            //获取料号
+            String product_id = o.getProduct_id();
+            //获取节点
+            String cpo = o.getCpo();
+            //获取和任务单相关的Shpmachud列表
+            List<Shpmachud> shpmachudList = shpmachudService.selectShpmachudById(product_id,device_id,cpo);
+
+            //无机台流水则跳过
+            if(shpmachudList.size() == 0){
+                continue;
+            }
+            //获取设备协议关联对象
+            Device_to_agreementVo device_to_agreementVo = deviceToAgreementService.selectDevice_to_agreementVoByDevice_id(device_id);
+            if(device_to_agreementVo == null){
+                System.out.println("设备："+device_id +"存在问题，可能无协议连接，可能无设备信息。");
+                continue;
+            }
+            //获取设备关联IoT设备ip
+            String ip = device_to_agreementVo.getIp();
+            //获取设备表名
+            String table = "equipment_" + ip.replace('.', '_');
+            //计算合模次数的总数变量
+            int total = 0;
+            for(Shpmachud s : shpmachudList){
+                //穴数无数据的步骤无需加入计算
+                if(s.getWorksheet() ==null){
+                    continue;
+                }
+                //获取时间段内的合模次数
+                String time1 = s.getDotime();
+                String time2 = "";
+                String time3 = "";
+                //有下模时间
+                if (s.getEndtime() != null) {
+                    //判断是否到下模时间，到了则以下模时间为准，未到则以当前时间为准
+                    time2 = s.getEndtime();
+                    time3 = Time.CalTime(time1,time2);
+                } else {
+                    //没有下模时间，直接以当前时间计算
+                    time2 = time_now;
+                    time3 = Time.CalTime(time1,time2);
+                }
+                //IoT合模次数
+                int mold_number = produceService.getQuantityByTime(table, time1, time2);
+                //取数
+                String number = s.getWorksheet();
+                String[] ss = number.split("#");
+                int w;
+                if(ss.length > 1){
+                    w = Integer.parseInt(ss[1]);
+                }
+                else {
+                    w = Integer.parseInt(number);
+                }
+
+
+                int quantity = mold_number * w;
+                total +=quantity;
+                System.out.println("total:"+ total);
+
+                //获取大周期
+//                if(produceService.getCycle3ByTime(table, time1, time2) == null) {
+//                    o.setActual_cycle(0);
+//                }
+//                else{
+//                    o.setActual_cycle(produceService.getCycle3ByTime(table, time1, time2));
+//                }
+
+            }
+            //计算总合模次数
+            o.setActual_production_quantity(total);
+            System.out.println(o.getDevice_id() + ":" + o.getNumrp());
+            //差异数
+            int difference_value = Math.abs(o.getNumrp() - total);
+            o.setDifference_value(difference_value);
+            //差异率
+            DecimalFormat dF = new DecimalFormat("0.00");
+            o.setDifference_proportion(dF.format((float)difference_value/o.getNumrp()*100) + "%");
+
+
+//            System.out.println(o.toString());
+            //更新方法//
+            planService.updatePlanVo2(o);
         }
         //for结束
         long etime = System.currentTimeMillis();

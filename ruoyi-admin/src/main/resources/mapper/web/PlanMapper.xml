@@ -128,6 +128,35 @@
             ) as temp
         where 1=1
     </select>
+    <select id="selectPlanVoList3" parameterType="PlanVo" resultMap="PlanVoResult">
+        SELECT *
+        from
+            (
+                SELECT
+                    pp.id,
+                    pp.cpo,
+                    pp.product_id,
+                    pp.device_id,
+                    d.device_type,
+                    d.workshop,
+                    pp.mold_id,
+                    pp.production_start_time,
+                    pp.production_end_time,
+                    pp.production_status,
+                    pp.planned_production_quantity,
+                    pp.numrp,
+                    pp.actual_production_quantity,
+                    pp.difference_proportion,
+                    pp.actual_cycle,
+                    pp.refresh_time
+
+                FROM
+                    planned_production AS pp,
+                    device AS d
+                WHERE pp.device_id = d.device_id
+            ) as temp
+        where 1=1 and temp.production_status = 2
+    </select>
 
     <select id="selectPlanVoById" parameterType="String" resultMap="PlanVoResult">
         <include refid="selectPlanVo"/>

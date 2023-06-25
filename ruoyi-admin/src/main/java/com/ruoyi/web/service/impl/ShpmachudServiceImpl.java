@@ -31,7 +31,7 @@ public class ShpmachudServiceImpl implements ShpmachudService {
     }
 
     @Override
-    public Shpmachud selectShpmachudById(String product_id, String device_id, String cpo){
+    public List<Shpmachud> selectShpmachudById(String product_id, String device_id, String cpo){
         return shpmachudMapper.selectShpmachudById(product_id,device_id,cpo);
     }
     @Override
@@ -39,4 +39,8 @@ public class ShpmachudServiceImpl implements ShpmachudService {
         return shpmachudMapper.updateShpmachud2(shpmachud);
     }
 
+    @Override
+    public Shpmachud selectShpmachudByDevice_idAndTime(String device_id, String dotime) {
+        return shpmachudMapper.selectShpmachudByDevice_idAndTime(device_id,dotime);
+    }
 }

@@ -34,6 +34,8 @@ public class PlanVo {
 
     private int planned_production_quantity;//计划生产数量
 
+    private int numrp; //新峰计数器
+
     private int actual_production_quantity; //实际生产数量
 
     private int difference_value;//差异值
@@ -176,7 +178,13 @@ public class PlanVo {
         this.actual_cycle = actual_cycle;
     }
 
+    public int getNumrp() {
+        return numrp;
+    }
 
+    public void setNumrp(int numrp) {
+        this.numrp = numrp;
+    }
 
     public String getRefresh_time() {
         return refresh_time;

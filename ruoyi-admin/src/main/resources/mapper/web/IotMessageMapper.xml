@@ -11,6 +11,7 @@
         <result property="time" column="time"/>
         <result property="status_value" column="status_value"/>
         <result property="agreement_id" column="agreement_id"/>
+        <result property="light" column="light"/>
         <result property="ip" column="ip"/>
         <result property="action" column="action"/>
         <result property="illustrate" column="illustrate"/>
@@ -22,7 +23,8 @@
             temp.device_type,
             temp.ip,
             e.time,
-            e.status_value
+            e.status_value,
+            e.light
         from
             (select
                  d.device_id,

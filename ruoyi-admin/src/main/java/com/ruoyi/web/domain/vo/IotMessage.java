@@ -13,6 +13,13 @@ public class IotMessage extends BaseEntity {
     private String tableName; //要查询的协议数据表名称
     private String device_id;//设备编号
     private String device_type;//设备别名
+
+    private String light;//安灯状态
+    private String cpo;//节点
+
+    private String product_id;//料号
+
+    private String mold_id;//模号
     private String time;//合模时 时间
     private String status_value;//解析后的位图
     private String agreement_id;//协议编号 C、D
@@ -50,6 +57,38 @@ public class IotMessage extends BaseEntity {
 
     public void setDevice_type(String device_type) {
         this.device_type = device_type;
+    }
+
+    public String getLight() {
+        return light;
+    }
+
+    public void setLight(String light) {
+        this.light = light;
+    }
+
+    public String getCpo() {
+        return cpo;
+    }
+
+    public void setCpo(String cpo) {
+        this.cpo = cpo;
+    }
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
+    }
+
+    public String getMold_id() {
+        return mold_id;
+    }
+
+    public void setMold_id(String mold_id) {
+        this.mold_id = mold_id;
     }
 
     public String getTime() {

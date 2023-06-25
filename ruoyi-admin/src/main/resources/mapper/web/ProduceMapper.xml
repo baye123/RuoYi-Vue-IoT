@@ -35,12 +35,6 @@
         pp.mold_id,
         d.device_type,
         d.workshop,
-        s.dotime,
-        s.dowid,
-        s.endtime,
-        s.endwid,
-        s.worksheet,
-        s.downcls,
         pp.planned_production_quantity,
         pp.numrp,
         pp.difference_value,
@@ -50,9 +44,8 @@
 
         FROM
         planned_production AS pp,
-        shpmachud AS s,
         device AS d
-        WHERE s.cls = "生产" and pp.cpo = s.cpo and d.device_id = pp.device_id
+        WHERE d.device_id = pp.device_id and pp.production_status = 2
         ) as temp
         where 1=1
         <if test='cpo!= null'>
@@ -102,7 +95,7 @@
         planned_production AS pp,
         shpmachud AS s,
         device AS d
-        WHERE s.cls = "生产" and pp.cpo = s.cpo and d.device_id = pp.device_id
+        WHERE pp.cpo = s.cpo and d.device_id = pp.device_id and pp.production_status = 2 and  s.cls !="随机模具维修" and s.cls !="下模" and s.cls !="等待下模" and s.cls !="模具维修"
         ) as temp
         where 1=1
     </select>

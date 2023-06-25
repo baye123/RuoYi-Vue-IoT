@@ -52,7 +52,7 @@ public class ToyoMessageController extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, ToyoMessage toyoMessage)
     {
-        List<ToyoMessage> list = toyoMessageService.selectToyoMessageList(toyoMessage);
+        List<ToyoMessage> list = toyoMessageService.selectToyoMessageList2(toyoMessage);
         ExcelUtil<ToyoMessage> util = new ExcelUtil<ToyoMessage>(ToyoMessage.class);
         util.exportExcel(response, list, "机台数据");
     }

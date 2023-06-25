@@ -18,4 +18,6 @@ public interface ToyoMessageService {
      * @return
      */
     public List<ToyoMessage> selectToyoMessageList(ToyoMessage toyoMessage);
+
+    public List<ToyoMessage> selectToyoMessageList2(ToyoMessage toyoMessage);
 }

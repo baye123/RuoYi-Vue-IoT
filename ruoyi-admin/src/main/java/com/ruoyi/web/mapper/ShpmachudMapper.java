@@ -32,7 +32,7 @@ public interface ShpmachudMapper {
      * @param device_id 设备编号 product_id 产品编号
      * @return 机台流水对象信息
      */
-    public Shpmachud selectShpmachudById(@Param("product_id") String product_id, @Param("device_id") String device_id, @Param("cpo") String cpo);
+    public List<Shpmachud> selectShpmachudById(@Param("product_id") String product_id, @Param("device_id") String device_id, @Param("cpo") String cpo);
 
     /**
      * 实时更新机台流水信息
@@ -41,5 +41,12 @@ public interface ShpmachudMapper {
      * @return 结果
      */
     public int updateShpmachud2(Shpmachud shpmachud);
+
+    /**查询同设备与开合模时间最相近的流水单，用于合模历史
+     *
+     * @param device_id 设备编号 time 合模时间
+     * @return 流水单对象信息
+     */
+    public Shpmachud selectShpmachudByDevice_idAndTime(@Param("device_id")String device_id,@Param("dotime") String dotime);
 
 }
