@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.utils.StringUtils;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -33,6 +30,9 @@ public class RyTask
 
     //解析命令的方法对象
     private Analysis analysis = new Analysis();
+
+    //绑定ip与Rabbitmq通道
+    Map<String, Channel> bindingIpMap = new HashMap<>();
 
 //    //消息数据存储的实体类对象
 //    private Message message =new Message();
@@ -58,7 +58,7 @@ public class RyTask
         System.out.println("执行无参方法啊啊啊");
     }
 
-    public void RabbitMQConsumer(){
+    public void RabbitMQConsumer() throws Exception{
         List<AgreementVo> agreementVoList = agreementVoService.getAgreementVoList();
         String ip ="";
         int status = 0;
@@ -69,6 +69,21 @@ public class RyTask
 
             for (AgreementVo agreementVo : agreementVoList) {
                 ip = agreementVo.getIp();
+
+                //如果协议正在运行
+                if(bindingIpMap.get(ip) != null){
+                    //但运行状态提前更改为停用，则关闭通道
+                    if(agreementVo.getAgreement_status() == 0){
+                        Channel channelEnd = bindingIpMap.get(ip);
+                        channelEnd.close();
+                        channelEnd.getConnection().close();
+                        //Map中移除该协议键值对
+                        bindingIpMap.remove(ip);
+                        System.out.println(ip + "已停用");
+                    }
+                    //状态不改变，跳出该循环
+                    continue;
+                }
                 status = agreementVo.getAgreement_status();
                 ArrayDeque arrayDeque = new ArrayDeque(30); //用于计算合模周期的队列
                 ArrayDeque arrayDeque2 = new ArrayDeque(30); //保留先前的合模周期的队列
@@ -78,16 +93,17 @@ public class RyTask
                 AtomicReference<Integer> t2 = new AtomicReference<Integer>();
                 arrayDeque2.add(0);
                 arrayDeque4.add(0);
+                //协议不在运行，但状态为停用，直接跳过该循环。
                 if(status == 0){
                     continue;
                 }
-                System.out.println(ip);
                 try {
                     Channel channel = RabbitUtil.getChannel();
                     RabbitUtil rabbitUtil = new RabbitUtil();
                     rabbitUtil.channelReceive(channel, "direct_IoT", ip, ip);
                     System.out.println("绑定成功？");
-
+                    //保存已经运行的协议ip和channel
+                    bindingIpMap.put(ip,channel);
                     // RabbitMQ收到消息的回调接口
                     DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                         String message2 = new String(delivery.getBody(), "UTF-8");
@@ -189,8 +205,5 @@ public class RyTask
                 }
 
             }
-        System.out.println("3");
-
-
     }
 }

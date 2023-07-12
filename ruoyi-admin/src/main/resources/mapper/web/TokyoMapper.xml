@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruoyi.web.mapper.TokyoMapper">
+
+    <resultMap id="TokyoResult" type="com.ruoyi.web.domain.Tokyo_33">
+        <id property="id" column="id"/>
+        <result property="recv_time" column="recv_time"/>
+        <result property="recv_unixts" column="recv_unixts"/>
+        <result property="id_molding" column="id_molding"/>
+        <result property="dev_time" column="dev_time"/>
+        <result property="t_eh1" column="t_eh1"/>
+        <result property="t_eh2" column="t_eh2"/>
+        <result property="t_eh3" column="t_eh3"/>
+        <result property="t_eh4" column="t_eh4"/>
+        <result property="t_eh5" column="t_eh5"/>
+        <result property="t_hopper" column="t_hopper"/>
+        <result property="pressure1" column="pressure1"/>
+        <result property="pressure2" column="pressure2"/>
+        <result property="pressure3" column="pressure3"/>
+        <result property="pressure_max" column="pressure_max"/>
+        <result property="pressure_resin" column="pressure_resin"/>
+        <result property="position_vp" column="position_vp"/>
+        <result property="position_margin" column="position_margin"/>
+        <result property="position_shooting" column="position_shooting"/>
+        <result property="speed_max" column="speed_max"/>
+        <result property="timing_cycle" column="timing_cycle"/>
+        <result property="timing_fill" column="timing_fill"/>
+        <result property="timing_metering" column="timing_metering"/>
+        <result property="timing_cooling" column="timing_cooling"/>
+        <result property="original_data_hex" column="original_data_hex"/>
+        <result property="original_data_bin" column="original_data_bin"/>
+    </resultMap>
+    <resultMap id="Tokyo46Result" type="com.ruoyi.web.domain.Tokyo_46">
+        <id property="id" column="id"/>
+        <result property="recv_time" column="recv_time"/>
+        <result property="recv_unixts" column="recv_unixts"/>
+        <result property="id_molding" column="id_molding"/>
+        <result property="dev_time" column="dev_time"/>
+        <result property="device_type" column="device_type"/>
+        <result property="operating_mode_coding" column="operating_mode_coding"/>
+        <result property="operating_mode" column="operating_mode"/>
+        <result property="product_name" column="product_name"/>
+        <result property="mold_id" column="mold_id"/>
+        <result property="id_molding" column="id_molding"/>
+        <result property="cycle_time" column="cycle_time"/>
+        <result property="operating_time" column="operating_time"/>
+        <result property="stop_time" column="stop_time"/>
+        <result property="ng_number" column="ng_number"/>
+        <result property="ng_rate" column="ng_rate"/>
+        <result property="product_number" column="product_number"/>
+        <result property="product_rate" column="product_rate"/>
+        <result property="operating_rate" column="operating_rate"/>
+        <result property="evolve" column="evolve"/>
+        <result property="original_data_hex" column="original_data_hex"/>
+        <result property="original_data_bin" column="original_data_bin"/>
+    </resultMap>
+
+
+
+    <!--新增保存数据-->
+    <insert id="saveTokyo" parameterType="Tokyo_33">
+        insert into ${table} (recv_time,recv_unixts,id_molding,dev_time,t_eh1,t_eh2,t_eh3,t_eh4,t_eh5,t_hopper,pressure1,pressure2,pressure3,pressure_max,pressure_resin,position_vp,position_margin,position_shooting,speed_max,timing_cycle,timing_fill,timing_metering,timing_cooling,original_data_hex,original_data_bin)
+        values (#{recv_time},#{recv_unixts},#{id_molding},#{dev_time},#{t_eh1},#{t_eh2},#{t_eh3},#{t_eh4},#{t_eh5},#{t_hopper},#{pressure1},#{pressure2},#{pressure3},#{pressure_max},#{pressure_resin},#{position_vp},#{position_margin},#{position_shooting},#{speed_max},#{timing_cycle},#{timing_fill},#{timing_metering},#{timing_cooling},#{original_data_hex},#{original_data_bin})
+    </insert>
+
+    <insert id="saveTokyo46" parameterType="Tokyo_46">
+        INSERT INTO ${table} (
+            recv_time,
+            recv_unixts,
+            dev_time,
+            device_type,
+            operating_mode_coding,
+            operating_mode,
+            product_name,
+            mold_id,
+            id_molding,
+            cycle_time,
+            operating_time,
+            stop_time,
+            ng_number,
+            ng_rate,
+            product_number,
+            product_rate,
+            operating_rate,
+            evolve,
+            original_data_hex,
+            original_data_bin
+        )
+        VALUES
+            (#{recv_time},
+             #{recv_unixts},
+             #{dev_time},
+             #{device_type},
+             #{operating_mode_coding},
+             #{operating_mode},
+             #{product_name},
+             #{mold_id},
+             #{id_molding},
+             #{cycle_time},
+             #{operating_time},
+             #{stop_time},
+             #{ng_number},
+             #{ng_rate},
+             #{product_number},
+             #{product_rate},
+             #{operating_rate},
+             #{evolve},
+             #{original_data_hex},
+             #{original_data_bin})
+        </insert>
+
+<!--    创建新的东洋数据表-->
+    <select id="existTable" parameterType="String" resultType="Integer">
+        select count(1)
+        from information_schema.`TABLES`
+        where LCASE(TABLE_NAME)=#{tableName} and TABLE_SCHEMA = "ry-vue"
+    </select>
+
+<!--    通过设备编号查询东洋设备绑定的协议ip-->
+    <select id="getIpByDevice_id" parameterType="String" resultType="String">
+        select ip
+        FROM
+            agreement as a,
+            device_to_agreement as da
+        where a.agreement_id = da.agreement_id
+          and a.agreement_type = "东洋TCP-IP"
+          and device_id = #{device_id}
+    </select>
+
+<!--    查询东洋数据-->
+    <select id="selectTokyo_33List" parameterType="Tokyo_33" resultMap="TokyoResult">
+        select * from ${table}
+        where 1=1
+        <if test='params.beginTime != null and params.endTime != null'>
+            and recv_time between #{params.beginTime}::timestamptz  and #{params.endTime}::timestamptz
+        </if>
+    </select>
+
+    <!--    查询东洋46数据-->
+    <select id="selectTokyo_46List" parameterType="Tokyo_46" resultMap="Tokyo46Result">
+        select * from ${table}
+        where 1=1
+        <if test='params.beginTime != null and params.endTime != null'>
+            and recv_time between #{params.beginTime}::timestamptz  and #{params.endTime}::timestamptz
+        </if>
+    </select>
+
+    <update id="createNewTable" parameterType="String">
+        create table ${table}
+        (
+                id INT ( 11 ) PRIMARY KEY NOT NULL auto_increment,
+                recv_time datetime,
+                recv_unixts VARCHAR ( 20 ),
+                id_molding INT ( 11 ),
+                dev_time datetime,
+                t_eh1 DECIMAL ( 10, 2 ),
+                t_eh2 DECIMAL ( 10, 2 ),
+                t_eh3 DECIMAL ( 10, 2 ),
+                t_eh4 DECIMAL ( 10, 2 ),
+                t_eh5 DECIMAL ( 10, 2 ),
+                t_hopper DECIMAL ( 10, 2 ),
+                pressure1 DECIMAL ( 10.2 ),
+                pressure2 DECIMAL ( 10.2 ),
+                pressure3 DECIMAL ( 10.2 ),
+                pressure_max DECIMAL ( 10.2 ),
+                pressure_resin DECIMAL ( 10.2 ),
+                position_vp DECIMAL ( 10, 2 ),
+                position_margin DECIMAL ( 10, 2 ),
+                position_shooting DECIMAL ( 10, 2 ),
+                speed_max DECIMAL ( 10, 2 ),
+                timing_cycle DECIMAL ( 10, 2 ),
+                timing_fill DECIMAL ( 10, 2 ),
+                timing_metering DECIMAL ( 10, 2 ),
+                timing_cooling DECIMAL ( 10, 2 ),
+                original_data_hex text,
+                original_data_bin BLOB
+                )
+    </update>
+    <update id="createNewTable46" parameterType="String">
+        CREATE TABLE ${table}
+        (
+            id INT ( 11 ) PRIMARY KEY NOT NULL auto_increment,
+            recv_time datetime,
+            recv_unixts VARCHAR ( 20 ),
+            dev_time datetime,
+            device_type varchar(20),
+            operating_mode_coding int(11),
+            operating_mode varchar(20),
+            product_name varchar(20),
+            mold_id varchar(20),
+            id_molding INT ( 11 ),
+            cycle_time varchar (20),
+            operating_time varchar(20),
+            stop_time varchar(20),
+            ng_number varchar(20),
+            ng_rate DECIMAL(10,2),
+            product_number int(11),
+            product_rate DECIMAL(10,2),
+            operating_rate DECIMAL(10,2),
+            evolve DECIMAL(10,2),
+            original_data_hex text,
+            original_data_bin BLOB
+        )
+    </update>
+
+
+
+
+
+
+
+</mapper>

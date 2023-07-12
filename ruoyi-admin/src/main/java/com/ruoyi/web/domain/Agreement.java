@@ -1,5 +1,6 @@
 package com.ruoyi.web.domain;
 
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -11,18 +12,22 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class Agreement extends BaseEntity {
     private Long id;//自增主键
 
+    @Excel(name = "协议编号")
     private String agreement_id;//协议编号
-
+    @Excel(name = "协议类型")
     private String agreement_type;//协议类型
 
+    @Excel(name = "协议IP")
     private String ip;//ip地址
 
+    @Excel(name = "协议端口")
     private String port;//访问端口
 
+    @Excel(name = "协议状态")
     private String agreement_status;//协议状态 是否生效
-
+    @Excel(name = "创建者")
     private String create_by;//创建者
-
+    @Excel(name = "创建时间")
     private String create_time;//创建时间
 
     private String update_by;//修改者

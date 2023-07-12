@@ -5,8 +5,10 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.domain.Agreement;
 import com.ruoyi.web.domain.Device;
+import com.ruoyi.web.domain.ToyoMessage;
 import com.ruoyi.web.service.AgreementService;
 import com.ruoyi.web.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -88,5 +91,18 @@ public class AgreementController extends BaseController {
     public AjaxResult remove(@PathVariable String[] agreement_ids)
     {
         return toAjax(agreementService.deleteAgreementByAgreement_ids(agreement_ids));
+    }
+
+    /**
+     * 导出协议数据
+     */
+    @Log(title = "协议信息", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('collection:agreement:export')")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Agreement agreement)
+    {
+        List<Agreement> agreementList = agreementService.selectAgreementList(agreement);
+        ExcelUtil<Agreement> util = new ExcelUtil<Agreement>(Agreement.class);
+        util.exportExcel(response, agreementList, "协议数据");
     }
 }

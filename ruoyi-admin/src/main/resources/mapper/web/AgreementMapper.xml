@@ -66,6 +66,13 @@
         )
     </insert>
 
+    <!--    查询协议表中类型为东洋TCP的协议-->
+    <select id="selectTokyo_AgreementList" parameterType="Agreement" resultMap="AgreementResult">
+        select *
+        from agreement
+        where agreement_type = "东洋TCP-IP"
+    </select>
+
     <update id="updateAgreement" parameterType="Agreement">
         update agreement
         <set>

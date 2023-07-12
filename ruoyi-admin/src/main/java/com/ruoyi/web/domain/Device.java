@@ -1,5 +1,6 @@
 package com.ruoyi.web.domain;
 
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -12,24 +13,29 @@ public class Device extends BaseEntity {
 
     private Long id;//自增主键
 
+    @Excel(name = "设备编号")
     private String device_id;//设备编号
-
+    @Excel(name = "设备名称")
     private String device_name;//设备名称
-
+    @Excel(name = "设备型号")
     private String device_type;//设备型号
-
+    @Excel(name = "设备品牌")
     private String device_brand;//设备品牌
-
+    @Excel(name = "设备状态")
     private String device_status;//设备状态
-
+    @Excel(name = "所在车间名称")
     private String workshop; //所在车间名称
 
+    @Excel(name = "制造日期")
     private String manufacture_date;//制造日期
 
+    @Excel(name = "购买日期")
     private String burchasing_date;//购买日期
 
+    @Excel(name = "创建人")
     private String create_by;//创建人
 
+    @Excel(name = "创建时间")
     private String create_time;//创建时间
 
     private String update_by;//修改人

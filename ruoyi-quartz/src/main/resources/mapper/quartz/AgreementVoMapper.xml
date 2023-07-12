@@ -19,7 +19,7 @@
 
     <select id="getAgreementVoList" parameterType="AgreementVo" resultMap="AgreementVoResult">
         select id,agreement_id,agreement_type,ip,port,agreement_status,create_by,create_time from agreement
-
+        WHERE agreement_type = "康耐德IoT"
     </select>
 
 

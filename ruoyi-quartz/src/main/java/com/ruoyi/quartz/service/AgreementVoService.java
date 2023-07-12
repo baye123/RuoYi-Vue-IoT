@@ -11,7 +11,7 @@ import java.util.List;
  * @Description : 协议服务类
  */
 public interface AgreementVoService {
-    /**查询协议列表
+    /**查询协议列表(仅查询IoT协议）
      *
      * @param
      * @return

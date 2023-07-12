@@ -5,6 +5,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.domain.Agreement;
 import com.ruoyi.web.domain.vo.Device_to_agreementVo;
 import com.ruoyi.web.service.AgreementService;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -87,6 +89,18 @@ public class DeviceToAgreementController extends BaseController {
     public AjaxResult remove(@PathVariable String[] agreement_ids)
     {
         return toAjax(deviceToAgreementService.deleteDevice_to_agreementVoByAgreement_ids(agreement_ids));
+    }
+    /**
+     * 导出协议数据
+     */
+    @Log(title = "数采策略管理", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('collection:device_to_agreement:export')")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Device_to_agreementVo device_to_agreementVo)
+    {
+        List<Device_to_agreementVo> device_to_agreementVoList = deviceToAgreementService.selectDevice_to_agreementVoList(device_to_agreementVo);
+        ExcelUtil<Device_to_agreementVo> util = new ExcelUtil<Device_to_agreementVo>(Device_to_agreementVo.class);
+        util.exportExcel(response, device_to_agreementVoList, "数采策略数据");
     }
 
 

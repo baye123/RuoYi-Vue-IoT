@@ -2,6 +2,7 @@ package com.ruoyi.web.mapper;
 
 import com.ruoyi.web.domain.Agreement;
 import com.ruoyi.web.domain.Device;
+import com.ruoyi.web.domain.Tokyo_33;
 
 import java.util.List;
 
@@ -54,4 +55,11 @@ public interface AgreementMapper {
      * @return 结果
      */
     public int AgreementByAgreement_ids(String[] agreement_ids);
+
+    /**
+     * 查询协议为东洋TCP的协议列表
+     * @param
+     * @return
+     */
+    List<Agreement> selectTokyo_AgreementList();
 }

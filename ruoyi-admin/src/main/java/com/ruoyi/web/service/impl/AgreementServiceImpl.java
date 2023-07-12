@@ -90,4 +90,9 @@ public class AgreementServiceImpl implements AgreementService {
         return agreementMapper.AgreementByAgreement_ids(agreement_ids);
     }
 
+    @Override
+    public List<Agreement> selectTokyo_AgreementList(){
+        return agreementMapper.selectTokyo_AgreementList();
+    }
+
 }

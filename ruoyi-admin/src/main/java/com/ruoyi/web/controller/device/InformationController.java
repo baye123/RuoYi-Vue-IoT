@@ -6,9 +6,11 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDictType;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.web.domain.Device;
 import com.ruoyi.web.domain.SocketMsg;
+import com.ruoyi.web.domain.ToyoMessage;
 import com.ruoyi.web.service.InformationService;
 import com.ruoyi.web.service.SocketMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -100,6 +103,16 @@ public class InformationController extends BaseController {
     {
         List<Device> device_idList = informationService.selectDevice_idList();
         return success(device_idList);
+    }
+
+    @Log(title = "设备信息", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('device:information:export')")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Device device)
+    {
+        List<Device> deviceList = informationService.selectDeviceList(device);
+        ExcelUtil<Device> util = new ExcelUtil<Device>(Device.class);
+        util.exportExcel(response, deviceList, "设备信息");
     }
 
 }

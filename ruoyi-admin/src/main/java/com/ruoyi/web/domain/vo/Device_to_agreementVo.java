@@ -1,5 +1,6 @@
 package com.ruoyi.web.domain.vo;
 
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -11,14 +12,18 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class Device_to_agreementVo extends BaseEntity {
     private Long id;//自增主键
 
+    @Excel(name = "协议编号")
     private String agreement_id;//协议编号
 
+    @Excel(name = "协议类型")
     private String agreement_type;//协议类型
-
+    @Excel(name = "设备编号")
     private String device_id;//设备id
 
+    @Excel(name = "设备名称")
     private String device_name;//设备名称
 
+    @Excel(name = "协议IP")
     private String ip; //Iot设备的IP地址
 
     public Long getId() {
